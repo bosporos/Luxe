@@ -1,0 +1,8 @@
+# Example configuration:
+
+[svc.ip-notifier]
+  sender.address = "rpi-noreply@example.com"
+  sender.password = "asupersecretpassword"
+  to = "my-inbox@example.com"
+  smtp.host = "smtp.example.com"
+  smtp.port = 587
