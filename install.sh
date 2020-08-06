@@ -4,7 +4,7 @@
 echo "Creating configuration directory"
 mkdir -p ./config
 echo "Copying configuration templates..."
-cp -v config-template/* config
+cp -vn config-template/* config
 
 # Create & register service
 echo "Generating service..."
