@@ -14,7 +14,7 @@ if ! [[ "$*" =~ .*no-update-hostname.* ]] ; then
     let sand_trap=0
     printf "127.0.0.1 ${LX_HOSTNAME}\n" | sudo tee -a /etc/hosts || let sand_trap=1
     if [[ "x$(hostname)" != "x${LX_HOSTNAME}" ]] ; then
-      printf "Could not change hostname, reseting...\n"
+      printf "Could not change hostname, reseting..\n"
       sudo hostnamectl set-hostname ${lx_original_hostname}
       if $(exit sand_trap) ; then
         lx_tmp_hostsf=$(mktemp || hosts.tmp)
@@ -38,5 +38,5 @@ fi
 # Step three, install [optional]
 if [[ "$*" =~ .*install.* ]] ; then
   printf "Command [install] detected...\nAttempting to install...\n"
-  sh "$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1 ; pwd)/install.sh"
+  "$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1 ; pwd)/install.sh"
 fi

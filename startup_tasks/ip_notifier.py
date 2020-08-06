@@ -38,7 +38,7 @@ def launch(lx_quiet=None):
 
     import subprocess
 
-    lx_ip_data = subprocess.Popen('hostname -i',shell=True,stdout=subprocess.PIPE).communicate()
+    lx_ip_data = subprocess.Popen('hostname -I',shell=True,stdout=subprocess.PIPE).communicate()
     lx_lxdev_ip = str(lx_ip_data[0],'utf-8').strip()
 
     import datetime

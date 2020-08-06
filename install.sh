@@ -13,22 +13,22 @@ GENSVC="luxe-$(date +%Y.%m.%d.%H.%M.%S).service"
 sudo cp ./${GENSVC} /etc/systemd/system/luxe.service
 read -p "Enable service {luxe.service}? [Y/n] (Y) " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
-  echo "Doing nothing..."
-else
   echo "Enabling service..."
   sudo systemctl enable luxe.service
+else
+  echo "Doing nothing..."
 fi
 
 sudo apt install python3-pip
-pip install toml
+pip3 install toml
 
 # Utility (f.e., if you want to edit the configs)
 read -p "Reboot? [Y/n] (n) " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]] ; then
-  echo "Not rebooting... use \`\`sudo shutdown --reboot +0'' to reboot."
-else
   echo "Rebooting..."
   sudo shutdown --reboot +0
+else
+  echo "Not rebooting... use \`\`sudo shutdown --reboot +0'' to reboot."
 fi
 
 echo "Fin."
