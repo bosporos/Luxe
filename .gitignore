@@ -1,2 +1,6 @@
 config
 startup_tasks/__pycache__
+luxe-*.service
+tests/a.out
+tests/off
+tests/led

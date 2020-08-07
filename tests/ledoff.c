@@ -46,7 +46,7 @@ int main() {
   float c = 0;
   int j = 0;
   int k = 1;
-  while(1) {
+//  while(1) {
 //	  if(fgetc(stdin) == 'q')
 //	    break;
   //  else {
@@ -69,9 +69,9 @@ int main() {
 		g = 0x16;
 		b = 0x84;
 	}*/
-        data[i][0] = (uint8_t) 0x02;
-        data[i][1] = (uint8_t) 0x02;
-        data[i][2] = (uint8_t) 0x02;
+        data[i][0] = (uint8_t) 0x00;
+        data[i][1] = (uint8_t) 0x00;
+        data[i][2] = (uint8_t) 0x00;
       }
       j += k;
       if(j == 10)
@@ -99,10 +99,10 @@ int main() {
       crc = crc ^ 0xffffffff;
       write(wsfd, (uint8_t *)&crc, 4);
       //serialFlush(wsfd);
-      delay(10);
+      //delay(10);
     	//}
     //}
-  }
+  //}
 
   tcsetattr(STDOUT_FILENO, TCSANOW, &o);
 

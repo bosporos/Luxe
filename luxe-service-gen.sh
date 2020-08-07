@@ -12,7 +12,7 @@ ExecStart=/usr/bin/python3 -u luxe-launcher.py
 WorkingDirectory=${lsg_wdir}
 StandardOutput=inherit
 StandardError=inherit
-Restart=always
+Restart=no
 User=${lsg_user}
 
 [Install]
