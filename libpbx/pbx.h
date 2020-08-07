@@ -46,12 +46,12 @@ typedef struct lx_pbx_driver
 
 #define LX_PBX_NO_DRIVER -1
 
-int lx_bpx_init (bool needs_wpi_setup);
+int lx_bpx_init (int needs_wpi_setup);
 int lx_bpx_driver_create (const char * device_file,
                           lx_pbx_driver_t * driver);
 int lx_pbx_driver_write_ws2812_chan (const lx_pbx_driver_t * driver,
                                      lx_pbx_ws2812_chan_t * channel,
-                                     const uint8_t[3] * pixel_data,
+                                     uint8_t * pixel_data,
                                      size_t pixel_num);
 int lx_pbx_driver_draw_accumulated (lx_pbx_driver_t * driver);
 int lx_pbx_driver_destroy (lx_pbx_driver_t * driver);

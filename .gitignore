@@ -4,3 +4,4 @@ luxe-*.service
 tests/a.out
 tests/off
 tests/led
+*.so

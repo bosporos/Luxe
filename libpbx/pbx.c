@@ -10,6 +10,7 @@
 
 #include <unistd.h> /* write(fd,dbuf,sz) */
 #include <errno.h>
+#include <sched.h>
 
 uint32_t __crc_update (uint32_t crc, const void * new_data, size_t dlen);
 void __crc_init (uint32_t * crc);
@@ -26,7 +27,7 @@ void __lxpbx_write (const void * data,
                     uint32_t * crc,
                     const lx_pbx_driver_t * driver);
 
-int lx_bpx_init (bool needs_wpi_setup)
+int lx_bpx_init (int needs_wpi_setup)
 {
     if (needs_wpi_setup) {
         wiringPiSetup ();
@@ -38,11 +39,11 @@ int lx_bpx_driver_create (const char * device_file,
                           lx_pbx_driver_t * driver)
 {
     int fd = serialOpen (device_file, LX_PBX_BAUD_RATE);
-    if (wsfd == -1) {
+    if (fd == -1) {
         /* error in errno */
         return LX_PBX_NO_DRIVER;
     }
-    driver->fd        = driver;
+    driver->fd        = fd;
     driver->last_draw = micros ();
     return 0;
 }
@@ -92,10 +93,12 @@ int lx_pbx_driver_draw_accumulated (lx_pbx_driver_t * driver)
         .record_type = LX_PBX_RECORD_DRAW_ACCUMULATED
     };
     while ((micros () - driver->last_draw) < 310)
-        yield ();
+        sched_yield ();
     __lxpbx_write_record_header (&record_header, &crc, driver);
     __crc_send (&crc, driver);
-    last_draw = micros ();
+    driver->last_draw = micros ();
+
+    return 0;
 }
 
 int lx_pbx_driver_destroy (lx_pbx_driver_t * driver)
@@ -104,7 +107,7 @@ int lx_pbx_driver_destroy (lx_pbx_driver_t * driver)
         return EINVAL;
     if (driver->fd < 0)
         return ENXIO;
-    serialClose (driver);
+    serialClose (driver->fd);
     return 0;
 }
 
@@ -184,7 +187,7 @@ void __lxpbx_write_record_header (lx_pbx_rec_hdr_t * rh,
                                   uint32_t * crc,
                                   const lx_pbx_driver_t * driver)
 {
-    __lxpbx_write (rh, sizeof lx_pbx_rec_hdr_t, crc, driver);
+    __lxpbx_write (rh, sizeof *rh, crc, driver);
 }
 void __lxpbx_write_ws2812_chaninfo (lx_pbx_ws2812_chan_t * chaninf,
                                     uint32_t * crc,
@@ -194,7 +197,7 @@ void __lxpbx_write_ws2812_chaninfo (lx_pbx_ws2812_chan_t * chaninf,
      * metadata that shouldn't be sent
      */
     __lxpbx_write (chaninf,
-                   sizeof lx_pbx_driver_t - 2,
+                   sizeof *chaninf - 2,
                    crc,
                    driver);
 }
