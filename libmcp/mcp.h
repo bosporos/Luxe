@@ -41,7 +41,7 @@ int lx_mcp_open (lx_mcp_t * mcp,
                  uint8_t cs,
                  uint32_t clock);
 int lx_mcp_close (lx_mcp_t * mcp);
-int lx_mcp_read_single (lx_mcp_t * mcp,
-                        uint8_t channel);
+uint16_t lx_mcp_read_single (lx_mcp_t * mcp,
+                             uint8_t channel);
 
 #endif /* !@__LX_LIBMCP */
