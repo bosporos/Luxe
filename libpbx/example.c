@@ -46,19 +46,19 @@ int main ()
             g = (float)0x43 * pow (sin (sine_pos + 0.1 * i) / 2.0 + 0.5, 2);
             b = (float)0x197 * pow (sin (sine_pos + 0.1 * i) / 2.0 + 0.5, 2);
 #elif defined(BOUNCE)
-            if (bounce_pos == i) {
-                r = 0x85;
-                g = 0x24;
-                b = 0x21;
-            } else {
-                r = 0x48;
-                g = 0x16;
-                b = 0x84;
-            }
+        if (bounce_pos == i) {
+            r = 0x85;
+            g = 0x24;
+            b = 0x21;
+        } else {
+            r = 0x48;
+            g = 0x16;
+            b = 0x84;
+        }
 #else /* SOLID */
-            r = 0x00;
-            g = 0x00;
-            b = 0x00;
+        r = 0x00;
+        g = 0x00;
+        b = 0x00;
 #endif
             data[i][0] = (uint8_t)r;
             data[i][1] = (uint8_t)g;
@@ -67,11 +67,11 @@ int main ()
 #ifdef SINEWAVE
         sine_pos += 0.02;
 #elif defined(BOUNCE)
-        bounce_pos += bounce_step;
-        if (bounce_pos == NUMPIXELS)
-            bounce_step = -1, bounce_pos = NUMPIXELS - 2;
-        if (bounce_pos == -1)
-            bounce_step = +1, bounce_pos = 1;
+    bounce_pos += bounce_step;
+    if (bounce_pos == NUMPIXELS)
+        bounce_step = -1, bounce_pos = NUMPIXELS - 2;
+    if (bounce_pos == -1)
+        bounce_step = +1, bounce_pos = 1;
 #endif
         lx_pbx_driver_write_ws2812_chan (&pbx, &chan, (uint8_t *)&data, NUMPIXELS);
         // draw
