@@ -108,6 +108,7 @@ int lx_pbx_driver_destroy (lx_pbx_driver_t * driver)
     if (driver->fd < 0)
         return ENXIO;
     serialClose (driver->fd);
+    driver->fd = -1;
     return 0;
 }
 
@@ -152,37 +153,6 @@ int lx_pbx_set_channel_comp_ws2812 (lx_pbx_ws2812_chan_t * channel,
     return 0;
 }
 
-static const uint32_t crc_table[16] = {
-    0x00000000, 0x1db71064, 0x3b6e20c8, 0x26d930ac, 0x76dc4190, 0x6b6b51f4, 0x4db26158, 0x5005713c, 0xedb88320, 0xf00f9344, 0xd6d6a3e8, 0xcb61b38c, 0x9b64c2b0, 0x86d3d2d4, 0xa00ae278, 0xbdbdf21c
-};
-
-uint32_t __crc_update (uint32_t crc, const void * new_data, size_t dlen)
-{
-    const unsigned char * d = (const unsigned char *)new_data;
-    unsigned int tbl_idx;
-
-    while (dlen--) {
-        tbl_idx = crc ^ *d;
-        crc     = crc_table[tbl_idx & 0x0f] ^ (crc >> 4);
-        tbl_idx = crc ^ (*d >> 4);
-        crc     = crc_table[tbl_idx & 0x0f] ^ (crc >> 4);
-        d++;
-    }
-    return crc & 0xffffffff;
-}
-
-void __crc_init (uint32_t * crc)
-{
-    *crc = 0xffffffff;
-}
-
-void __crc_send (uint32_t * crc,
-                 const lx_pbx_driver_t * driver)
-{
-    (*crc) = (*crc) ^ 0xffffffff;
-    write (driver->fd, (uint8_t *)crc, 4);
-}
-
 void __lxpbx_write_record_header (lx_pbx_rec_hdr_t * rh,
                                   uint32_t * crc,
                                   const lx_pbx_driver_t * driver)
@@ -209,4 +179,33 @@ void __lxpbx_write (const void * data,
 {
     write (driver->fd, data, dlen);
     *crc = __crc_update (*crc, data, dlen);
+}
+
+// Based on https://github.com/simap/PBDriverAdapter/blob/master/src/PBDriverAdapter.cpp
+
+static const uint32_t crc_table[16] = {
+    0x00000000, 0x1db71064, 0x3b6e20c8, 0x26d930ac, 0x76dc4190, 0x6b6b51f4, 0x4db26158, 0x5005713c, 0xedb88320, 0xf00f9344, 0xd6d6a3e8, 0xcb61b38c, 0x9b64c2b0, 0x86d3d2d4, 0xa00ae278, 0xbdbdf21c
+};
+
+uint32_t __crc_update (uint32_t crc, const void * new_data, size_t dlen)
+{
+    const uint8_t * d = (const unsigned char *)new_data;
+    while (dlen--) {
+        crc = crc_table[(crc ^ *d) & 0x0f] ^ (crc >> 4);
+        crc = crc_table[(crc ^ (*d >> 4)) & 0x0f] ^ (crc >> 4);
+        d++;
+    }
+    return crc;
+}
+
+void __crc_init (uint32_t * crc)
+{
+    *crc = 0xffffffff;
+}
+
+void __crc_send (uint32_t * crc,
+                 const lx_pbx_driver_t * driver)
+{
+    (*crc) = (*crc) ^ 0xffffffff;
+    write (driver->fd, (uint8_t *)crc, 4);
 }
