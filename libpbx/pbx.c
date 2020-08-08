@@ -27,7 +27,7 @@ void __lxpbx_write (const void * data,
                     uint32_t * crc,
                     const lx_pbx_driver_t * driver);
 
-int lx_bpx_init (int needs_wpi_setup)
+int lx_pbx_init (int needs_wpi_setup)
 {
     if (needs_wpi_setup) {
         wiringPiSetup ();
@@ -35,7 +35,7 @@ int lx_bpx_init (int needs_wpi_setup)
     return 0;
 }
 
-int lx_bpx_driver_create (const char * device_file,
+int lx_pbx_driver_create (const char * device_file,
                           lx_pbx_driver_t * driver)
 {
     int fd = serialOpen (device_file, LX_PBX_BAUD_RATE);
@@ -124,7 +124,7 @@ int lx_pbx_open_channel_ws2812 (uint8_t chan_no,
     channel->channel_no = chan_no;
     if (ENOTSUP == lx_pbx_set_channel_comp_ws2812 (channel, chan_type))
         return ENOTSUP;
-    if ((red_i | green_i | blue_i | white_i) & 0xfb)
+    if ((red_i | green_i | blue_i | white_i) & 0xfc)
         return EDOM;
     channel->red_component_placement   = red_i;
     channel->green_component_placement = green_i;
@@ -197,7 +197,7 @@ void __lxpbx_write_ws2812_chaninfo (lx_pbx_ws2812_chan_t * chaninf,
      * metadata that shouldn't be sent
      */
     __lxpbx_write (chaninf,
-                   sizeof *chaninf - 2,
+                   4,
                    crc,
                    driver);
 }

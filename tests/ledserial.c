@@ -72,9 +72,9 @@ int main ()
 		g = 0x16;
 		b = 0x84;
 	}*/
-            data[i][0] = (uint8_t)0x02;
-            data[i][1] = (uint8_t)0x02;
-            data[i][2] = (uint8_t)0x02;
+            data[i][0] = (uint8_t)r;
+            data[i][1] = (uint8_t)g;
+            data[i][2] = (uint8_t)b;
         }
         j += k;
         if (j == 10)
