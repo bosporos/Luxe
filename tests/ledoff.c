@@ -9,7 +9,7 @@
 #include <math.h>
 
 const char * dev = "/dev/ttyS0";
-#define NUMPIXELS 10
+#define NUMPIXELS 240
 
 uint32_t crc_update(uint32_t crc, const void * data, size_t data_len);
 
@@ -54,7 +54,7 @@ int main() {
        //send data
       fh_t fh = {'U','P','X','L',0,1};
       ch_t ch = {3,1,0,2,0,10};
-      uint8_t data[10][3];
+      uint8_t data[240][3];
       uint8_t r,g,b;
       for(int i = 0;i < NUMPIXELS;i++) {
         r = (float)0x148 * pow(sin(c + 0.1 * i) / 2.0 + 0.5, 2);

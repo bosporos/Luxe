@@ -5,3 +5,6 @@ tests/a.out
 tests/off
 tests/led
 *.so
+libpbx/example
+libpbx/led
+libpbx/off
