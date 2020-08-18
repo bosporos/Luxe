@@ -34,7 +34,7 @@ int main ()
     lx_pbx_open_channel_ws2812 (0, &chan, LX_PBX_CHANNEL_RGB, 1, 0, 2, 0);
 
     char a[NUMPIXELS];
-    char b[NUMPIXELS];
+    char o[NUMPIXELS];
     float n[NUMPIXELS];
     randomize (&a);
 
@@ -55,15 +55,15 @@ int main ()
                     | ((i == NUMPIXELS - 1 ? a[0] : a[i + 1]) << 0);
                 if (c >= 1 && c <= 4) {
                     n[i] = c + 4;
-                    b[i] = 1;
+                    o[i] = 1;
                 } else {
                     if (c == 0)
                         n[i] = 1;
                     else
                         n[i] = c - 3;
-                    b[i] = 0;
+                    o[i] = 0;
                 }
-                if (b[i] != a[i])
+                if (o[i] != a[i])
                     change = 1;
             }
             if (!change)
@@ -88,6 +88,8 @@ int main ()
             data[i][0] = (uint8_t)r;
             data[i][1] = (uint8_t)g;
             data[i][2] = (uint8_t)b;
+
+            a[i] = b[i];
         }
         lx_pbx_driver_write_ws2812_chan (&pbx, &chan, (uint8_t *)&data, NUMPIXELS);
         // draw
