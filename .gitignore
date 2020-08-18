@@ -8,3 +8,4 @@ tests/led
 libpbx/example
 libpbx/led
 libpbx/off
+libmcp/test

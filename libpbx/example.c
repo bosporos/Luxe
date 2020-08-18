@@ -12,7 +12,7 @@
 #include <wiringPi.h>
 
 const char * dev = "/dev/ttyS0";
-#define NUMPIXELS 240
+#define NUMPIXELS 215
 
 #define SINEWAVE
 //#define BOUNCE
@@ -42,9 +42,9 @@ int main ()
         uint8_t r, g, b;
         for (int i = 0; i < NUMPIXELS; i++) {
 #ifdef SINEWAVE
-            r = (float)0x148 * pow (sin (sine_pos + 0.1 * i) / 2.0 + 0.5, 2);
-            g = (float)0x43 * pow (sin (sine_pos + 0.1 * i) / 2.0 + 0.5, 2);
-            b = (float)0x197 * pow (sin (sine_pos + 0.1 * i) / 2.0 + 0.5, 2);
+            r = (float)0xe8 * pow (sin (sine_pos + 0.01 * i) / 2.0 + 0.5, 2);
+            g = (float)0x43 * pow (sin (sine_pos + 0.01 * i) / 2.0 + 0.5, 2);
+            b = (float)0x17 * pow (sin (sine_pos + 0.01 * i) / 2.0 + 0.5, 2);
 #elif defined(BOUNCE)
         if (bounce_pos == i) {
             r = 0x85;
@@ -56,9 +56,9 @@ int main ()
             b = 0x84;
         }
 #else /* SOLID */
-        r = 0x00;
-        g = 0x00;
-        b = 0x00;
+        r = 0x01;
+        g = 0x01;
+        b = 0x01;
 #endif
             data[i][0] = (uint8_t)r;
             data[i][1] = (uint8_t)g;
